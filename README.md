@@ -107,4 +107,4 @@ go run .
 Don't communicate by sharing memory, share memory by communicating.
 ```
 
-[- Читать туториалы](https://github.com/Astar75/go_learning.wiki.git)
+[- Читать туториалы](https://github.com/Astar75/go_learning.wiki)
