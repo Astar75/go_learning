@@ -74,3 +74,35 @@ func main() {
 go run .
 Hello, World!
 ```
+
+
+### Добавление зависимостей
+Немного разнообразим вывод добавив для примера подключение зависимости из стороннего кода. Для этого изменим код следующим образом.
+
+
+```go
+package main
+
+import "fmt"
+import "rsc.io/quote" 
+
+func main() {
+  fmt.Println(quote.Go())
+  // fmt.Println("Hello, World!")
+} 
+```
+
+Далее выполним в терминале команду, для подключения зависимостей в `go.mod`.
+
+```
+go mod tidy
+go: finding module for package rsc.io/quote
+go: found rsc.io/quote in rsc.io/quote v1.5.2
+```
+
+Остается только запустить и увидеть результат.
+
+```
+go run .
+Don't communicate by sharing memory, share memory by communicating.
+```
