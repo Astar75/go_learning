@@ -106,3 +106,5 @@ go: found rsc.io/quote in rsc.io/quote v1.5.2
 go run .
 Don't communicate by sharing memory, share memory by communicating.
 ```
+
+[- Читать туториалы](https://github.com/Astar75/go_learning.wiki.git)
