@@ -1,8 +1,25 @@
 package greet
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+	"math/rand"
+)
 
-func Hello(name string) string {
-	message := fmt.Sprintf("Привет, %v! Добро пожаловать!", name)
-	return message
+func Hello(name string) (string, error) {
+	if name == "" {
+		return "", errors.New("empty name")
+	}
+
+	message := fmt.Sprintf(randomFormat(), name)
+	return message, nil
+}
+
+func randomFormat() string {
+	formats := []string{
+		"Hi, %v. Welcome!",
+		"Great to see you, %v!",
+		"Hail, %v! Well met!",
+	}
+	return formats[rand.Intn(len(formats))]
 }
