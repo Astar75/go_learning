@@ -107,3 +107,225 @@ go run .
 Don't communicate by sharing memory, share memory by communicating.
 ```
 
+## Короткий курс по Go
+
+Простая программа в Go выглядит вот так:
+```go
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, User") 
+} 
+```
+### Пакеты
+Каждая программа состоит из пакетов. Программа всегда должна запускаться в пакете main. В данной программе используется импорт пакетов fmt и math/rand. По соглашению в языке имя пакета содержит файлы, начинающегося с оператора package rand. 
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand"
+)
+
+func main() {
+	fmt.Println("My favorite number is", rand.Intn(10))
+}
+```
+### Импорты
+Этот код группирует импорты в круглых скобках (факторизованный оператор импорта). 
+Возможно писать импорт пакетов в каждую строчку.
+```go
+import "fmt"
+import "math"
+```
+Но хороший стиль использовать именно факторизованный оператор импорта.
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	fmt.Printf("Now you have %g problems.\n", math.Sqrt(7))
+}
+```
+
+### Экспортированные имена 
+В Go имя экспортируется, если оно начинается с заглавной буквы. Например Pizza - экспортированное имя как и Pi из пакета math.
+Имена, которые начинаются с маленькой буквы экспортироваться не будут, а значит не будут доступны с другого пакета.
+
+Например данный код не скомпилируется... 
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	fmt.Println(math.pi)
+}
+```
+...до тех пор пока не заменим `math.pi` до `math.Pi`. 
+
+### Функции
+Функция может быть с одним и более аргументами или без аргументов.
+В примере `add()` принимает два параметра типа `int`.
+
+```go
+package main
+
+import "fmt"
+
+func add(x int, y int) int {
+	return x + y
+}
+
+func main() {
+	fmt.Println(add(42, 13))
+}
+```
+Если два или более аргументов функции имеют один и тот же тип, то можно опустить тип во всех параметров кроме последнего. 
+
+Например можно заменить 
+```go
+func add(x int, y int) int {
+}
+```
+```
+на 
+```
+```go
+func add(x, y int) int {
+}
+```
+### Возврат несколько результатов
+Функции могут возвращать любое количество результатов.
+Функция swap возвращает две строки. 
+```go
+package main
+
+import "fmt"
+
+func swap(x, y string) (string, string) {
+	return y, x
+}
+
+func main() {
+	a, b := swap("hello", "world")
+	fmt.Println(a, b)
+}
+```
+### Именованные возвращаемые значения
+Возвращаемые значения в Go могут иметь имена. Эти имена следует использовать для документирования значения возвращаемых значений. 
+Оператор return без аргументов возвращает именованные возвращаемые значения. Это называется как "голый" возврат. 
+
+Голые операторы возврата следует использовать только в коротких функциях, как в примере, показанном здесь. Они могут ухудшить читаемость длинных функций.
+
+```go
+package main
+
+import "fmt"
+
+func split(sum int) (x, y int) {
+	x = sum * 4 / 9
+	y = sum - x
+	return
+}
+
+func main() {
+	fmt.Println(split(17))
+}
+```
+### Переменные 
+Для объявления переменных есть оператор `var`. Тип переменной указывается в конце имени переменной. Оператор `var` может находиться на уровне пакета или функции. В этом примере показаны оба случая: 
+```go
+package main
+
+import "fmt"
+
+var c, python, java bool
+
+func main() {
+	var i int
+	fmt.Println(i, c, python, java)
+}
+```
+Так же имеется возможность при создании переменной задать инициализацию. При этом тип можно не указывать. 
+```go
+package main
+
+import "fmt"
+
+var i, j int = 1, 2
+
+func main() {
+	var c, python, java = true, false, "no!"
+	fmt.Println(i, j, c, python, java)
+}
+```
+Внутри функций так же доступно создание переменной с присвоением без ключевого слова `var`, так же известное как короткое объявление переменных
+
+```go
+package main
+
+import "fmt"
+
+func main() {
+	var i, j int = 1, 2
+	k := 3
+	c, python, java := true, false, "no!"
+
+	fmt.Println(i, j, k, c, python, java)
+}
+```
+### Базовые типы данных
+В Go доступны следующие базовые типы данных 
+
+```
+bool
+
+string
+
+int  int8  int16  int32  int64
+uint uint8 uint16 uint32 uint64 uintptr
+
+byte // alias for uint8
+
+rune // alias for int32
+     // represents a Unicode code point
+
+float32 float64
+
+complex64 complex128
+```
+В примере ниже показаны примеры нескольких типов, а так же то, что объявления переменных могут быть разложены на блоки в случае с операторами импорта. 
+
+Типы int, uint и uintptr обычно имеет размер 32 бита в 32-битных системах и 64 бита в 64-битных системах.
+
+Используйте int, если нет особой причины использовать размерный или беззнаковый целочисленный тип.
+```go
+package main
+
+import (
+	"fmt"
+	"math/cmplx"
+)
+
+var (
+	ToBe   bool       = false
+	MaxInt uint64     = 1<<64 - 1
+	z      complex128 = cmplx.Sqrt(-5 + 12i)
+)
+
+func main() {
+	fmt.Printf("Type: %T Value: %v\n", ToBe, ToBe)
+	fmt.Printf("Type: %T Value: %v\n", MaxInt, MaxInt)
+	fmt.Printf("Type: %T Value: %v\n", z, z)
+}
+```
