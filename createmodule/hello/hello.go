@@ -10,7 +10,9 @@ func main() {
 	log.SetPrefix("greetings:")
 	log.SetFlags(log.LstdFlags)
 
-	message, err := greet.Hello("Obito")
+	names := []string{"Naruto", "Hinata", "Obito"}
+
+	message, err := greet.Hellos(names)
 	if err != nil {
 		log.Fatal(err)
 	}
